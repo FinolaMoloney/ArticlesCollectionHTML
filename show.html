@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>New Article</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    </head>
+    <body onload="loadData()">
+        <h2>Article Client</h2>
+        <div id="articles"></div>
+        <button onclick="showForm()">Create a new Article</button>
+        <button onclick="showForm()">Edit an Article</button>
+        <form id="myForm">
+            <h1>Create a new Article</h1>
+            <label for="title">Title:</label>
+            <input type="string" id="title"/>
+            <br />
+            <label for="body">Body:</label>
+            <input type="text" id="body"/>
+            <br />
+            <label for="published">Published?</label>
+            <input type="checkbox" id="published"/>
+            <br />
+            <button onclick="createArticle()">Submit</button>
+            <br />
+        </form>
+            <div id="new"></div>
+            <div id="edit"></div>
+        <script>
+            async function loadData() {
+                var url="http://localhost:4000/articles"
+                var response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json' 
+                    },
+                })
+                var data = await response.json()
+                var div=''
+                for(var i=0; i<data.length; i++) {
+                    var published = "Not Published"
+                    if (data[i]["published"]) {
+                        published = "Published"
+                    }
+                    div += published + ' Title: '+ data[i]['title'] + ' Body: '+ data[i]['body'] + ' '
+                }
+                document.getElementById('articles').innerText = div
+            }
+            function showForm() {
+                var form = document.getElementById("myForm");
+                form.style.display = "block";
+            }
+            async function createArticle() {
+                var url="http://localhost:4000/articles"
+                var title = document.getElementById("title").value
+                var body = document.getElementById("body").value
+                var published = document.getElementById("published").checked
+                var data = {
+                    title: title,
+                    body: body,
+                    published: published
+                }
+                var response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                var result = await response.json()
+                console.log(result)
+
+                if(result.error) {
+                    document.getElementById("new").innerText = result.error
+                    var form = document.getElementById("myForm");
+                    form.style.display = "block";
+                } else {
+                    document.getElementById("new").innerText = title + " " + body
+                    var form = document.getElementById("myForm");
+                    form.style.display = "block";
+                }
+            }
+            async function editArticle(id) {
+                var url="http://localhost:4000/articles/${id}"
+                var id =  document.getElementById("id").value
+                var title = document.getElementById("title").value
+                var body = document.getElementById("body").value
+                var published = document.getElementById("published").checked
+                var data = {
+                    title: title,
+                    body: body,
+                    published: published
+                }
+                var response = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                var result = await response.json()
+                console.log(result)
+
+                if(result.error) {
+                    document.getElementById("${id}").innerText = result.error
+                    var form = document.getElementById("myForm");
+                    form.style.display = "block";
+                } else {
+                    document.getElementById("${id}").innerText = title + " " + body
+                    var form = document.getElementById("myForm");
+                    form.style.display = "block";
+                }
+            }
+        </script>
+    </body>
+</html>
