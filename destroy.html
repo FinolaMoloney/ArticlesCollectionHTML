@@ -27,7 +27,7 @@
     <script>
       async function searchArticle() {
         const articleId = document.getElementById("article-id").value;
-        const url = `http://localhost:4000/articles/${articleId}`;
+        const url = `http://18.203.81.62:4000/articles/${articleId}`;
         const response = await fetch(url, {
           method: 'DELETE',
           headers: {
