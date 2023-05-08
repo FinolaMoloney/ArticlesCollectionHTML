@@ -28,7 +28,7 @@
             <div id="edit"></div>
         <script>
             async function loadData() {
-                var url="http://18.203.81.62:4000/articles"
+                var url="http://localhost:4000/articles"
                 var response = await fetch(url, {
                     method: 'GET',
                     headers: {
@@ -52,7 +52,7 @@
                 form.style.display = "block";
             }
             async function createArticle() {
-                var url="http://18.203.81.62:4000/articles"
+                var url="http://localhost:4000/articles"
                 var title = document.getElementById("title").value
                 var body = document.getElementById("body").value
                 var published = document.getElementById("published").checked
@@ -83,7 +83,7 @@
                 }
             }
             async function editArticle(id) {
-                var url="http://18.203.81.62:4000/articles/${id}"
+                var url="http://localhost:4000/articles/${id}"
                 var id =  document.getElementById("id").value
                 var title = document.getElementById("title").value
                 var body = document.getElementById("body").value
